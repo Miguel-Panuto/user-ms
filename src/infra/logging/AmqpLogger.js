@@ -14,7 +14,7 @@ module.exports = class AmqpLogger extends Transport {
       message: info.message || null,
       level: info.level || null,
       timestamp: new Date(),
-      serviceName: this.serviceName || null,
+      service_name: this.serviceName || null,
     });
     const conn = await connect(config.amqp.uri);
     const channel = await conn.createChannel();
