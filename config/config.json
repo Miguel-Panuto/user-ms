@@ -1,0 +1,26 @@
+{
+  "serviceName": "user-ms",
+  "port": 3000,
+  "amqp": {
+    "uri": "amqp://guest:guest@localhost:5672",
+    "subs": [
+      {
+        "topicName": "userChange",
+        "topicEvent": "user-change"
+      }
+    ],
+    "pubs": [
+      {
+        "topicName": "sendLogs",
+        "topicEvent": "send-logs"
+      }
+    ]
+  },
+  "db": {
+    "uri": "mongodb://localhost/user",
+    "auth": {
+      "username": "root",
+      "password": "pass"
+    }
+  }
+}
