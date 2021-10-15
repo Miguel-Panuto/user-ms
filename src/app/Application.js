@@ -6,13 +6,12 @@ module.exports = class Application {
   }
 
   async start() {
-    const { server, amqpClient, amqpChannels, messageRouter, mongoConnection } =
+    const { server, amqpClient, amqpChannels, mongoConnection } =
       this.container.cradle;
 
     await server.start();
     await amqpClient.start();
     await amqpChannels.createExchanges();
-    await messageRouter.initiateRoutes();
     await mongoConnection.start();
   }
 };
