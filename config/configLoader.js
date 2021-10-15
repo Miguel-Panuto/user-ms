@@ -2,6 +2,10 @@ const config = require('./config.json');
 
 module.exports = {
   ...config,
+  amqp: {
+    ...config.amqp,
+    uri: proccess.env.AMQP_URI || config.amqp.uri,
+  },
   db: {
     uri: process.env.MONGO_CONNECT || config.db.uri,
     auth: {
