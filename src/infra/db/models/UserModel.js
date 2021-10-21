@@ -17,6 +17,11 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    phone: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     document: {
       type: String,
       required: true,

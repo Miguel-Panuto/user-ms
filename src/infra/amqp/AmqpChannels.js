@@ -24,9 +24,11 @@ module.exports = class AmqpChannels {
       if (index < 0) allExchanges.push(ex);
     });
     if (allExchanges.length > 0)
-      allExchanges.forEach(async ({ topicName, topicEvent }) => {
-        this.logger.info(`${this.type} on topic: ${topicName}`);
-        await channel.assertExchange(topicEvent, 'fanout');
+      allExchanges.forEach(async (topic) => {
+        this.logger.info(
+          `${this.type} on topic: ${topic.topicName} with type: ${topic.topicType}`
+        );
+        await channel.assertExchange(topic.topicEvent, topic.topicType);
       });
   }
-}
+};

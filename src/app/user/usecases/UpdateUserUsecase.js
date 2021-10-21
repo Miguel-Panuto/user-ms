@@ -3,7 +3,14 @@ const makePubUser = require('src/app/user/entities/PubEntity');
 
 const fileName = 'UpdateUserUsecase';
 
-module.exports = ({ logger, userRepository, pubSub }) => ({
+module.exports = ({
+  logger,
+  userRepository,
+  pubSub,
+  config: {
+    amqp: { pubs },
+  },
+}) => ({
   update: async (id, body) => {
     const callName = `${fileName}.update()`;
     logger.info(
@@ -15,7 +22,7 @@ module.exports = ({ logger, userRepository, pubSub }) => ({
     );
     await userRepository.changeUser(id, userToUpdate);
     const pubUser = makePubUser({ ...userToUpdate, id }, 'update');
-    await pubSub.publish('user-change', pubUser);
+    await pubSub.publish(pubs[1].topicName, pubUser);
     return userRepository.findUserById(id);
   },
 });

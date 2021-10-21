@@ -7,11 +7,15 @@
     "pubs": [
       {
         "topicName": "sendLogs",
-        "topicEvent": "send-logs"
+        "topicEvent": "send-logs",
+        "topicType": "fanout",
+        "routingKey": ""
       },
       {
         "topicName": "userChange",
-        "topicEvent": "user-change"
+        "topicEvent": "user-change",
+        "topicType": "fanout",
+        "routingKey": ""
       }
     ]
   },

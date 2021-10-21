@@ -1,23 +1,21 @@
 const fileName = 'PubSub';
 
-const _createMessage = (message) =>
-  Buffer.from(JSON.stringify(message));
+const _createMessage = (message) => Buffer.from(JSON.stringify(message));
 
 module.exports = ({
   logger,
   amqpClient,
   config: {
-    amqp: { subs },
+    amqp: { subs, pubs },
+    serviceName,
   },
 }) => ({
   subscribe: async (topicName, callBack) => {
     const channel = await amqpClient.getChannel();
-    const q = await channel.assertQueue('');
-    const topicEvent = subs.find(
-      (sub) => sub.topicName === topicName
-    )?.topicEvent;
-    if (!topicEvent) throw new Error('No event found');
-    await channel.bindQueue(q.queue, topicEvent, '');
+    const topic = subs.find((sub) => sub.topicName === topicName);
+    const q = await channel.assertQueue(`${topic.topicEvent}_${serviceName}`);
+    if (!topic) throw new Error('No event found');
+    await channel.bindQueue(q.queue, topic.topicEvent, topic.routingKey);
     await channel.consume(
       q.queue,
       async (msg) => {
@@ -29,10 +27,19 @@ module.exports = ({
     );
   },
 
-  publish: async (exchange, message) => {
+  publish: async (topicName, message) => {
     const callName = `${fileName}.publish()`;
+    const topic = pubs.find((pub) => pub.topicName === topicName);
+    if (!topic) throw new Error('No event found');
     const channel = await amqpClient.getChannel();
-    logger.info(`${callName} - Publishing in exchange the message`, message);
-    return channel.publish(exchange, '', _createMessage(message));
+    logger.info(
+      `${callName} - Publishing in exchange the message in exchange ${topic.topicName}`,
+      message
+    );
+    return channel.publish(
+      topic.topicEvent,
+      topic.routingKey,
+      _createMessage(message)
+    );
   },
 });
