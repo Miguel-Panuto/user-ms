@@ -28,6 +28,12 @@ module.exports = class UserRepository {
     return this.userModel.findById(id);
   }
 
+  async findUserByEmail(email) {
+    const callName = `${fileName}.findUserByEmail()`;
+    this.logger.info(`${callName} entered with email: ${email}`);
+    return this.userModel.findOne({ email });
+  }
+
   async changeUser(id, obj) {
     const callName = `${fileName}.changeUser()`;
     this.logger.info(

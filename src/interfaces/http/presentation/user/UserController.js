@@ -6,7 +6,7 @@ module.exports = ({
   findUsersUsecase,
   findUserByIdUsecase,
   updateUserUsecase,
-  deleteUserUsecase
+  deleteUserUsecase,
 }) => ({
   findUsers: async (req, res) => {
     const callName = `${fileName}.findUsers()`;
@@ -53,7 +53,7 @@ module.exports = ({
       return res.status(403).json({ error: 'a error has been ocoured' });
     }
   },
-  
+
   changeUser: async (req, res) => {
     const callName = `${fileName}.changeUser()`;
     const body = req.body;
